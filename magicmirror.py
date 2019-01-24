@@ -225,7 +225,7 @@ def water_fall(led_strip, wait_ms=50):  # Trigger animation
         led_strip.show()
         time.sleep(wait_ms / 1000.0)
     status.led_mode = 0
-    fade_out(led_strip)
+    # fade_out(led_strip)
 
 
 def loading(led_strip, color, length, speed=10.0):
@@ -244,15 +244,16 @@ def loading(led_strip, color, length, speed=10.0):
 def check_status(actual_motion_status, actual_light_lvl):
     # if status.checkpoint(actualMotionStatus, actualLightLvl) == True:
     if actual_light_lvl:
-        if status.get_motion_trigger():
-            if not timer.get_blocked():
+        if not timer.get_blocked():
+            if status.get_motion_trigger():
                 status.led_mode = 1
                 water_fall(strip, 20)
             else:
-                rooling(strip, 10)
+                status.led_mode = 0
+                breath(strip, Color(206, 135, 250))
         else:
-            status.led_mode = 0
-            breath(strip, Color(206, 135, 250))
+            rooling(strip, 10)
+
 
 
 def looking_for_motion(led_strip):
