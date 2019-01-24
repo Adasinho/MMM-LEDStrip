@@ -84,7 +84,7 @@ class Timer:
             if (self.lastTime + self.duration) < actual_time:
                 self.blocked = False
             elif motion:
-                self.set_timer(actual_time, 30)
+                self.set_timer(actual_time, 20)
 
     def set_timer(self, actual_time, how_long):
         self.lastTime = actual_time
