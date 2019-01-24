@@ -134,7 +134,7 @@ def fade_out_from_current_brightness(led_strip, wait_ms=10):
         time.sleep(wait_ms / 1000.0)
     return True
 
-def rooling(led_strip, iterations, wait_ms=25):
+def rooling(led_strip, iterations, wait_ms=20):
     for i in range(led_strip.numPixels() - 1, 1, -1):
         tmp = led_strip.getPixelColor(i - 1)
         led_strip.setPixelColor(i - 1, led_strip.getPixelColor(i))
