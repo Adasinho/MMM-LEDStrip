@@ -134,6 +134,19 @@ def fade_out_from_current_brightness(led_strip, wait_ms=10):
         time.sleep(wait_ms / 1000.0)
     return True
 
+def rooling(led_strip, iterations, wait_ms=10):
+    for k in range(0, iterations, 1):
+        for i in range(0, led_strip.numPixels() - 1, 1):
+            tmp = led_strip.getPixelColor(i + 1)
+            led_strip.setPixelColor(i + 1, led_strip.getPixelColor(i))
+            led_strip.setPixelColor(i, tmp)
+        tmp = led_strip.getPixelColor(0)
+        led_strip.setPixelColor(0, led_strip.getPixelColor(led_strip.numPixels() - 1))
+        led_strip.setPixelColor(led_strip.numPixels() - 1, tmp)
+
+        led_strip.show()
+        time.sleep(wait_ms / 1000.0)
+
 
 def snake(led_strip, length, wait_ms=5):
     temp_color = 0
@@ -235,6 +248,8 @@ def check_status(actual_motion_status, actual_light_lvl):
             if not timer.get_blocked():
                 status.led_mode = 1
                 water_fall(strip, 20)
+            else:
+                rooling(strip, 10)
         else:
             status.led_mode = 0
             breath(strip, Color(206, 135, 250))
