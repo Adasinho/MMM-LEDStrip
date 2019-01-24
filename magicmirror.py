@@ -261,7 +261,7 @@ def looking_for_motion(led_strip):
         if status.led_mode == 0:
             if not status.checkpoint(GPIO.input(11), GPIO.input(13)):
                 timer.set_timer(time.time(), 30)
-                fade_out_fromCurrent_brightness(led_strip, 1)
+                fade_out_from_current_brightness(led_strip, 1)
                 water_fall(led_strip, 20)
                 return True
     return False
