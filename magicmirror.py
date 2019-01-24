@@ -135,17 +135,21 @@ def fade_out_from_current_brightness(led_strip, wait_ms=10):
     return True
 
 def rooling(led_strip, iterations, wait_ms=10):
-    for k in range(0, iterations, 1):
-        for i in range(0, led_strip.numPixels() - 1, 1):
-            tmp = led_strip.getPixelColor(i + 1)
-            led_strip.setPixelColor(i + 1, led_strip.getPixelColor(i))
-            led_strip.setPixelColor(i, tmp)
-        tmp = led_strip.getPixelColor(0)
-        led_strip.setPixelColor(0, led_strip.getPixelColor(led_strip.numPixels() - 1))
-        led_strip.setPixelColor(led_strip.numPixels() - 1, tmp)
+    if looking_for_motion(led_strip):
+        fade_out(led_strip)
+        return False
 
-        led_strip.show()
-        time.sleep(wait_ms / 1000.0)
+    for i in range(led_strip.numPixels() - 1, 1, -1):
+        tmp = led_strip.getPixelColor(i - 1)
+        led_strip.setPixelColor(i - 1, led_strip.getPixelColor(i))
+        led_strip.setPixelColor(i, tmp)
+    tmp = led_strip.getPixelColor(0)
+    led_strip.setPixelColor(0, led_strip.getPixelColor(led_strip.numPixels() - 1))
+    led_strip.setPixelColor(led_strip.numPixels() - 1, tmp)
+
+    led_strip.show()
+    time.sleep(wait_ms / 1000.0)
+    return True
 
 
 def snake(led_strip, length, wait_ms=5):
