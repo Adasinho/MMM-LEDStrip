@@ -26,7 +26,7 @@ class Status:
         self.motionTrigger = False
         self.led_mode = 0
 
-    def checkLightLvl(self, actual_light_lvl):
+    def check_light_lvl(self, actual_light_lvl):
         if self.lightLvl != actual_light_lvl:
             if actual_light_lvl:
                 self.lightLvl = actual_light_lvl
@@ -56,7 +56,7 @@ class Status:
             else:
                 return False
 
-    def getMotionTrigger(self):
+    def get_motion_trigger(self):
         if self.motionTrigger:
             self.motionTrigger = False
             return True
@@ -64,7 +64,7 @@ class Status:
             return False
 
     def checkpoint(self, actual_motion_status, actual_light_lvl):
-        # if self.checkLightLvl(actualLightLvl) == True: # When we have night
+        # if self.check_light_lvl(actualLightLvl) == True: # When we have night
         if not self.check_motion(actual_motion_status):  # When nobody is move
             return True  # Can animate
 
@@ -72,182 +72,182 @@ class Status:
 
 
 class Timer:
-    def __init__(self, actual_time):
+    def __init__(self):
         self.blocked = False
         self.lastTime = 0
         self.duration = 0
 
-    def checkTimer(self, actual_time, motion):
+    def check_timer(self, actual_time, motion):
         print 'Actual Time in ms: ', actual_time
         print 'Last time + delay: ', self.lastTime + self.duration
         if self.blocked:
             if (self.lastTime + self.duration) < actual_time:
                 self.blocked = False
             elif motion:
-                self.setTimer(actual_time, 30)
+                self.set_timer(actual_time, 30)
 
-    def setTimer(self, actual_time, how_long):
+    def set_timer(self, actual_time, how_long):
         self.lastTime = actual_time
         self.duration = how_long
         self.blocked = True
 
-    def getBlocked(self):
+    def get_blocked(self):
         return self.blocked
 
 
-def setColor(strip, color, brightness):
-    for i in range(strip.numPixels()):
-        strip.setPixelColor(i, color)
-        strip.setBrightness(brightness)
-        strip.show()
+def set_color(led_strip, color, brightness):
+    for i in range(led_strip.numPixels()):
+        led_strip.setPixelColor(i, color)
+        led_strip.setBrightness(brightness)
+        led_strip.show()
 
 
-def fadeIn(strip, color, wait_ms=10):
+def fade_in(led_strip, color, wait_ms=10):
     for i in range(255):
-        for k in range(strip.numPixels()):
-            strip.setPixelColor(k, color)
-        strip.setBrightness(i)
-        strip.show()
-        if lookingForMotion(strip):
+        for k in range(led_strip.numPixels()):
+            led_strip.setPixelColor(k, color)
+        led_strip.setBrightness(i)
+        led_strip.show()
+        if looking_for_motion(led_strip):
             return False
         time.sleep(wait_ms / 1000.0)
     return True
 
 
-def fadeOut(strip, wait_ms=10):
+def fade_out(led_strip, wait_ms=10):
     for i in range(255, 0, -1):
-        strip.setBrightness(i)
-        strip.show()
-        if lookingForMotion(strip):
+        led_strip.setBrightness(i)
+        led_strip.show()
+        if looking_for_motion(led_strip):
             return False
         time.sleep(wait_ms / 1000.0)
     # status.led_mode = 0
     return True
 
 
-def fadeOutFromCurrentBrightness(strip, wait_ms=10):
-    for i in range(strip.getBrightness(), 0, -1):
-        strip.setBrightness(i)
-        strip.show()
-        if lookingForMotion(strip):
+def fade_out_from_current_brightness(led_strip, wait_ms=10):
+    for i in range(led_strip.getBrightness(), 0, -1):
+        led_strip.setBrightness(i)
+        led_strip.show()
+        if looking_for_motion(led_strip):
             return False
         time.sleep(wait_ms / 1000.0)
     return True
 
 
-def snake(strip, length, wait_ms=5):
+def snake(led_strip, length, wait_ms=5):
     temp_color = 0
-    for i in range(strip.numPixels()):
-        if (i + length) < strip.numPixels():
-            temp_color = strip.getPixelColor(i)
-            strip.setPixelColor(i + length, temp_color)
+    for i in range(led_strip.numPixels()):
+        if (i + length) < led_strip.numPixels():
+            temp_color = led_strip.getPixelColor(i)
+            led_strip.setPixelColor(i + length, temp_color)
         else:
-            temp_color = strip.getPixelColor(i)
-            strip.setPixelColor(i + length - strip.numPixels(), temp_color)
-        strip.setPixelColor(i, Color(0, 0, 0))
-        strip.show()
+            temp_color = led_strip.getPixelColor(i)
+            led_strip.setPixelColor(i + length - led_strip.numPixels(), temp_color)
+        led_strip.setPixelColor(i, Color(0, 0, 0))
+        led_strip.show()
         time.sleep(wait_ms / 1000.0)
-    strip.setPixelColor(length, temp_color)
-    strip.show()
+    led_strip.setPixelColor(length, temp_color)
+    led_strip.show()
     time.sleep(wait_ms / 1000.0)
 
 
-def breath(strip, color, wait_ms=10):  # idle animation
+def breath(led_strip, color, wait_ms=10):  # idle animation
     """Breath effect"""
 
     startBrightness = 0
     stopBrightness = LED_BRIGHTNESS
     step = 1
 
-    setColor(strip, Color(0, 0, 0), 0)
+    set_color(led_strip, Color(0, 0, 0), 0)
 
-    if not fadeIn(strip, color):
+    if not fade_in(led_strip, color):
         return False
-    if not fadeOut(strip):
+    if not fade_out(led_strip):
         return False
 
-    setColor(strip, Color(0, 0, 0), 0)
+    set_color(led_strip, Color(0, 0, 0), 0)
     time.sleep(0.2)
 
 
-def mirrorFall(strip, color, wait_ms=50):
+def mirror_fall(led_strip, color, wait_ms=50):
     """Mirror Fall"""
 
-    strip.setBrightness(255)
+    led_strip.setBrightness(255)
 
     x1 = 0
     x2 = 0
     iterations = 0
 
-    if strip.numPixels() % 2 == 0:
-        x1 = strip.numPixels() / 2 - 1
-        x2 = strip.numPixels() / 2
-        iterations = strip.numPixels() / 2 - 1
+    if led_strip.numPixels() % 2 == 0:
+        x1 = led_strip.numPixels() / 2 - 1
+        x2 = led_strip.numPixels() / 2
+        iterations = led_strip.numPixels() / 2 - 1
     else:
-        x1 = strip.numPixels() / 2
-        x2 = strip.numPixels() / 2
-        iterations = strip.numPixels() / 2 + 1
+        x1 = led_strip.numPixels() / 2
+        x2 = led_strip.numPixels() / 2
+        iterations = led_strip.numPixels() / 2 + 1
 
     for i in range(iterations):
-        strip.setPixelColor(x1 - i, color)
-        strip.setPixelColor(x2 + i, color)
-        strip.show()
+        led_strip.setPixelColor(x1 - i, color)
+        led_strip.setPixelColor(x2 + i, color)
+        led_strip.show()
         time.sleep(wait_ms / 1000.0)
 
-    fadeOut(strip)
+    fade_out(led_strip)
 
 
-def waterFall(strip, wait_ms=50):  # Trigger animation
+def water_fall(led_strip, wait_ms=50):  # Trigger animation
     """Waterfall"""
-    setColor(strip, Color(0, 0, 0), 0)
-    strip.setBrightness(255)
-    strip.setPixelColor(0, Color(0, randint(0, 127), randint(0, 255)))
+    set_color(led_strip, Color(0, 0, 0), 0)
+    led_strip.setBrightness(255)
+    led_strip.setPixelColor(0, Color(0, randint(0, 127), randint(0, 255)))
 
     temp_color = 0
-    for i in range(strip.numPixels()):
+    for i in range(led_strip.numPixels()):
         for k in range(i, 0, -1):
-            temp_color = strip.getPixelColor(k - 1)
-            strip.setPixelColor(k, temp_color)
-        strip.setPixelColor(0, Color(0, randint(0, 127), randint(0, 255)))
-        strip.show()
+            temp_color = led_strip.getPixelColor(k - 1)
+            led_strip.setPixelColor(k, temp_color)
+        led_strip.setPixelColor(0, Color(0, randint(0, 127), randint(0, 255)))
+        led_strip.show()
         time.sleep(wait_ms / 1000.0)
     status.led_mode = 0
-    fadeOut(strip)
+    fade_out(led_strip)
 
 
-def loading(strip, color, length, speed=10.0):
-    setColor(strip, Color(0, 0, 0), 0)
-    strip.setBrightness(255)
+def loading(led_strip, color, length, speed=10.0):
+    set_color(led_strip, Color(0, 0, 0), 0)
+    led_strip.setBrightness(255)
     for i in range(length):
-        strip.setPixelColor(i, color)
+        led_strip.setPixelColor(i, color)
 
-    for i in range(length, strip.numPixels(), 1):
-        strip.setPixelColor(i, color)
+    for i in range(length, led_strip.numPixels(), 1):
+        led_strip.setPixelColor(i, color)
         if i % 10 == 0:
             speed = float(speed / 2.0)
-        snake(strip, i, speed)
+        snake(led_strip, i, speed)
 
 
-def checkStatus(actual_motion_status, actual_light_lvl):
+def check_status(actual_motion_status, actual_light_lvl):
     # if status.checkpoint(actualMotionStatus, actualLightLvl) == True:
     if actual_light_lvl:
-        if status.getMotionTrigger():
-            if not timer.getBlocked():
+        if status.get_motion_trigger():
+            if not timer.get_blocked():
                 status.led_mode = 1
-                waterFall(strip, 20)
+                water_fall(strip, 20)
         else:
             status.led_mode = 0
             breath(strip, Color(206, 135, 250))
 
 
-def lookingForMotion(strip):
-    timer.checkTimer(time.time(), GPIO.input(11))
-    if not timer.getBlocked():
+def looking_for_motion(led_strip):
+    timer.check_timer(time.time(), GPIO.input(11))
+    if not timer.get_blocked():
         if status.led_mode == 0:
             if not status.checkpoint(GPIO.input(11), GPIO.input(13)):
-                timer.setTimer(time.time(), 30)
-                fadeOutFromCurrentBrightness(strip, 1)
-                waterFall(strip, 20)
+                timer.set_timer(time.time(), 30)
+                fade_out_fromCurrent_brightness(led_strip, 1)
+                water_fall(led_strip, 20)
                 return True
     return False
 
@@ -275,7 +275,7 @@ if __name__ == '__main__':
     GPIO.setup(13, GPIO.IN)
 
     # Initialize Timer
-    timer = Timer(time.time())
+    timer = Timer()
 
     # Initialize status Class (set actual value for all sensors)
     status = Status(GPIO.input(11), True)
@@ -287,12 +287,12 @@ if __name__ == '__main__':
     oldState = 0
     status.led_mode = 1  # 0 - idle mode, 1 - trigger mode
 
-    mirrorFall(strip, Color(99, 255, 71))  # First welcome animate
+    mirror_fall(strip, Color(99, 255, 71))  # First welcome animate
 
     try:
         while True:
             # status.check_motion(GPIO.input(11))
-            checkStatus(GPIO.input(11), GPIO.input(13))
+            check_status(GPIO.input(11), GPIO.input(13))
 
         # print ('Light sky blue')
         # breath(strip, Color(206, 135, 250))
@@ -307,9 +307,9 @@ if __name__ == '__main__':
         # print ('Yellow')
         # breath(strip, Color(255, 255, 0))
         # print ('Mirror Fall Blue')
-        # mirrorFall(strip, Color(0, 0, 255))
+        # mirror_fall(strip, Color(0, 0, 255))
         # print ('Waterfall')
-        # waterFall(strip)
+        # water_fall(strip)
         # print ('Loading')
         # loading(strip, Color(255, 255, 0), 5, 50.0)
 
