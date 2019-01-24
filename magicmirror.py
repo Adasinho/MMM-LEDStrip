@@ -146,7 +146,8 @@ def rooling(led_strip, iterations, wait_ms=25):
     led_strip.show()
     time.sleep(wait_ms / 1000.0)
 
-    if looking_for_motion(led_strip):
+    timer.check_timer(time.time(), GPIO.input(11))
+    if not timer.get_blocked():
         status.led_mode = 0
         fade_out(led_strip)
 
