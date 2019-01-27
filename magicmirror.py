@@ -84,7 +84,7 @@ class Timer:
             if (self.lastTime + self.duration) < actual_time:
                 self.blocked = False
             elif motion:
-                self.set_timer(actual_time, 20)
+                self.set_timer(actual_time, 8)
 
     def set_timer(self, actual_time, how_long):
         self.lastTime = actual_time
@@ -225,7 +225,7 @@ def water_fall(led_strip, wait_ms=50):  # Trigger animation
         for k in range(i, 0, -1):
             temp_color = led_strip.getPixelColor(k - 1)
             led_strip.setPixelColor(k, temp_color)
-        led_strip.setPixelColor(0, Color(0, randint(0, 127), randint(0, 255)))
+        led_strip.setPixelColor(0, Color(0, randint(127, 255), randint(127, 255)))
         led_strip.show()
         time.sleep(wait_ms / 1000.0)
     status.led_mode = 0
@@ -266,7 +266,7 @@ def looking_for_motion(led_strip):
     if not timer.get_blocked():
         if status.led_mode == 0:
             if not status.checkpoint(GPIO.input(11), GPIO.input(13)):
-                timer.set_timer(time.time(), 30)
+                timer.set_timer(time.time(), 8)
                 fade_out_from_current_brightness(led_strip, 1)
                 water_fall(led_strip, 20)
                 return True
