@@ -225,7 +225,7 @@ def water_fall(led_strip, wait_ms=50):  # Trigger animation
         for k in range(i, 0, -1):
             temp_color = led_strip.getPixelColor(k - 1)
             led_strip.setPixelColor(k, temp_color)
-        led_strip.setPixelColor(0, Color(0, randint(127, 255), randint(127, 255)))
+        led_strip.setPixelColor(0, Color(randint(0, 127), 0, randint(0, 255)))
         led_strip.show()
         time.sleep(wait_ms / 1000.0)
     status.led_mode = 0
