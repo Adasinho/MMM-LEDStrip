@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5795e2ae-8f64-41b6-86cf-f0b1421e8718" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/magicmirror.py" beforeDir="false" afterPath="$PROJECT_DIR$/magicmirror.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,8 +15,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/magicmirror.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="375">
               <caret line="308" column="31" lean-forward="true" selection-start-line="308" selection-start-column="31" selection-end-line="308" selection-end-column="31" />
+=======
+            <state relative-caret-position="204">
+              <caret line="27" column="39" selection-start-line="27" selection-start-column="39" selection-end-line="27" selection-end-column="39" />
+>>>>>>> Add new idle animation
               <folding>
                 <element signature="e#91#102#0" expanded="true" />
               </folding>
@@ -37,6 +41,10 @@
       <find>for</find>
       <find>led_strip</find>
       <find>set_color</find>
+<<<<<<< HEAD
+=======
+      <find>.x</find>
+>>>>>>> Add new idle animation
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -129,8 +137,13 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/magicmirror.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="375">
           <caret line="308" column="31" lean-forward="true" selection-start-line="308" selection-start-column="31" selection-end-line="308" selection-end-column="31" />
+=======
+        <state relative-caret-position="204">
+          <caret line="27" column="39" selection-start-line="27" selection-start-column="39" selection-end-line="27" selection-end-column="39" />
+>>>>>>> Add new idle animation
           <folding>
             <element signature="e#91#102#0" expanded="true" />
           </folding>

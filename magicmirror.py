@@ -23,33 +23,37 @@ colors = [Color(99, 255, 71), Color(250, 0, 154), Color(206, 135, 250)]
 last_color_choose = 0
 
 def smooth_color_transition(led_strip, new_color, wait_ms=50):
-    old_color = led_strip.getPixelColor(0);
+    r = led_strip.getPixelColor(0) >> 16
+    g = led_strip.getPixelColor(0) >> 8
+    b = led_strip.getPixelColor(0) >> 0
     direction = [1, 1, 1]
     max = 0
 
-    if old_color.x > new_color.x:
+    if r > new_color >> 16:
         direction[0] = -1
-        tmp = abs(old_color.x - new_color.x)
+        tmp = abs(r - new_color >> 16)
         if tmp > max:
             max = tmp
-    if old_color.y > new_color.y:
+    if g > new_color >> 8:
         direction[1] = -1
-        tmp = abs(old_color.y - new_color.y)
+        tmp = abs(g - new_color >> 8)
         if tmp > max:
             max = tmp
-    if old_color.z > new_color.z:
+    if b > new_color >> 0:
         direction[2] = -1
-        tmp = abs(old_color.z - new_color.z)
+        tmp = abs(b - new_color >> 0)
         if tmp > max:
             max = tmp
 
     for i in range(max):
-        if old_color.x != new_color.x:
-            old_color.x + direction[0]
-        if old_color.y != new_color.y:
-            old_color.y + direction[1]
-        if old_color.z != new_color.z:
-            old_color.z + direction[2]
+        if r != new_color >> 16:
+            r + direction[0]
+        if g != new_color >> 8:
+            g + direction[1]
+        if b != new_color >> 0:
+            b + direction[2]
+
+        old_color = r | g | b
 
         set_color(led_strip, old_color, LED_BRIGHTNESS)
         time.sleep(wait_ms / 1000.0)
