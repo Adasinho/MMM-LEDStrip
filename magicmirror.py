@@ -17,6 +17,13 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
+USE_DUSK_DETECTOR = True
+
+def get_dusk_status():
+    if USE_DUSK_DETECTOR:
+        return GPIO.input(13)
+    else:
+        return True
 
 # Class to control LEDs
 class Status:
@@ -225,7 +232,7 @@ def water_fall(led_strip, wait_ms=50):  # Trigger animation
         for k in range(i, 0, -1):
             temp_color = led_strip.getPixelColor(k - 1)
             led_strip.setPixelColor(k, temp_color)
-        led_strip.setPixelColor(0, Color(randint(0, 127), 0, randint(0, 255)))
+        led_strip.setPixelColor(0, Color(0, randint(0, 127), randint(0, 255)))
         led_strip.show()
         time.sleep(wait_ms / 1000.0)
     status.led_mode = 0
@@ -265,7 +272,7 @@ def looking_for_motion(led_strip):
     timer.check_timer(time.time(), GPIO.input(11))
     if not timer.get_blocked():
         if status.led_mode == 0:
-            if not status.checkpoint(GPIO.input(11), GPIO.input(13)):
+            if not status.checkpoint(GPIO.input(11), get_dusk_status()):
                 timer.set_timer(time.time(), 8)
                 fade_out_from_current_brightness(led_strip, 1)
                 water_fall(led_strip, 20)
@@ -313,7 +320,7 @@ if __name__ == '__main__':
     try:
         while True:
             # status.check_motion(GPIO.input(11))
-            check_status(GPIO.input(11), GPIO.input(13))
+            check_status(GPIO.input(11), get_dusk_status())
 
         # print ('Light sky blue')
         # breath(strip, Color(206, 135, 250))
