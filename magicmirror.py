@@ -62,9 +62,11 @@ def smooth_color_transition(led_strip, new_color, wait_ms=20):
 
         old_color = Color(r, g, b)
 
-        for k in range(led_strip.numPixels())
+        for k in range(led_strip.numPixels()):
             led_strip.setPixelColor(k, old_color)
         led_strip.show()
+        if looking_for_motion(led_strip):
+            return False
         time.sleep(wait_ms / 1000.0)
 
 def idle_animation(led_strip):
