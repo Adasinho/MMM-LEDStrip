@@ -16,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/magicmirror.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="234" column="60" selection-start-line="234" selection-start-column="60" selection-end-line="234" selection-end-column="60" />
+            <state relative-caret-position="375">
+              <caret line="308" column="31" lean-forward="true" selection-start-line="308" selection-start-column="31" selection-end-line="308" selection-end-column="31" />
               <folding>
                 <element signature="e#91#102#0" expanded="true" />
               </folding>
@@ -33,6 +33,10 @@
       <find>GPIO.input(13)</find>
       <find>set_timer</find>
       <find>8</find>
+      <find>rooling</find>
+      <find>for</find>
+      <find>led_strip</find>
+      <find>set_color</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -125,8 +129,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/magicmirror.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="234" column="60" selection-start-line="234" selection-start-column="60" selection-end-line="234" selection-end-column="60" />
+        <state relative-caret-position="375">
+          <caret line="308" column="31" lean-forward="true" selection-start-line="308" selection-start-column="31" selection-end-line="308" selection-end-column="31" />
           <folding>
             <element signature="e#91#102#0" expanded="true" />
           </folding>

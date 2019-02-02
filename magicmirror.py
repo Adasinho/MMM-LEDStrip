@@ -19,6 +19,48 @@ LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 USE_DUSK_DETECTOR = True
 
+colors = [Color(99, 255, 71), Color(250, 0, 154), Color(206, 135, 250)]
+last_color_choose = 0
+
+def smooth_color_transition(led_strip, new_color, wait_ms=50):
+    old_color = led_strip.getPixelColor(0);
+    direction = [1, 1, 1]
+    max = 0
+
+    if old_color.x > new_color.x:
+        direction[0] = -1
+        tmp = abs(old_color.x - new_color.x)
+        if tmp > max:
+            max = tmp
+    if old_color.y > new_color.y:
+        direction[1] = -1
+        tmp = abs(old_color.y - new_color.y)
+        if tmp > max:
+            max = tmp
+    if old_color.z > new_color.z:
+        direction[2] = -1
+        tmp = abs(old_color.z - new_color.z)
+        if tmp > max:
+            max = tmp
+
+    for i in range(max):
+        if old_color.x != new_color.x:
+            old_color.x + direction[0]
+        if old_color.y != new_color.y:
+            old_color.y + direction[1]
+        if old_color.z != new_color.z:
+            old_color.z + direction[2]
+
+        set_color(led_strip, old_color, LED_BRIGHTNESS)
+        time.sleep(wait_ms / 1000.0)
+
+def idle_animation(led_strip):
+    while True:
+        tmp = randint(0, 3)
+        if tmp != last_color_choose:
+            smooth_color_transition(led_strip, colors[tmp])
+            return True
+
 def get_dusk_status():
     if USE_DUSK_DETECTOR:
         return GPIO.input(13)
@@ -261,7 +303,8 @@ def check_status(actual_motion_status, actual_light_lvl):
                 water_fall(strip, 20)
             else:
                 status.led_mode = 0
-                breath(strip, Color(206, 135, 250))
+                #breath(strip, Color(206, 135, 250))
+                idle_animation(strip)
         else:
             status.led_mode = 1
             rooling(strip, 10)
