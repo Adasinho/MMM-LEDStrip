@@ -23,40 +23,40 @@ colors = [Color(99, 255, 71), Color(250, 0, 154), Color(206, 135, 250)]
 last_color_choose = 0
 
 def un_color(color):
-    return ((color >> 24) & 0xFF, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF)
+    return ((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF)
 
 def smooth_color_transition(led_strip, new_color, wait_ms=50):
     old_color = un_color(led_strip.getPixelColor(0))
-    r = old_color[1]
-    g = old_color[2]
-    b = old_color[3]
+    r = old_color[0]
+    g = old_color[1]
+    b = old_color[2]
     direction = [1, 1, 1]
     max = 0
 
     temp_new_color = un_color(new_color)
 
-    if r > temp_new_color[1]:
+    if r > temp_new_color[0]:
         direction[0] = -1
-        tmp = abs(r - temp_new_color[1])
+        tmp = abs(r - temp_new_color[0])
         if tmp > max:
             max = tmp
-    if g > temp_new_color[2]:
+    if g > temp_new_color[1]:
         direction[1] = -1
-        tmp = abs(g - temp_new_color[2])
+        tmp = abs(g - temp_new_color[1])
         if tmp > max:
             max = tmp
-    if b > temp_new_color[3]:
+    if b > temp_new_color[2]:
         direction[2] = -1
-        tmp = abs(b - temp_new_color[3])
+        tmp = abs(b - temp_new_color[2])
         if tmp > max:
             max = tmp
 
     for i in range(max):
-        if r != temp_new_color[1]:
+        if r != temp_new_color[0]:
             r + direction[0]
-        if g != temp_new_color[2]:
+        if g != temp_new_color[1]:
             g + direction[1]
-        if b != temp_new_color[3]:
+        if b != temp_new_color[2]:
             b + direction[2]
 
         old_color = r | g | b
