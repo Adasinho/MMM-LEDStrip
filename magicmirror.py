@@ -22,34 +22,44 @@ USE_DUSK_DETECTOR = True
 colors = [Color(99, 255, 71), Color(250, 0, 154), Color(206, 135, 250)]
 last_color_choose = 0
 
+def un_color(color):
+    return ((color >> 24) & 0xFF, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF)
+
 def smooth_color_transition(led_strip, new_color, wait_ms=50):
-    old_color = led_strip.getPixelColor(0);
+    old_color = un_color(led_strip.getPixelColor(0))
+    r = old_color[1]
+    g = old_color[2]
+    b = old_color[3]
     direction = [1, 1, 1]
     max = 0
 
-    if old_color.x > new_color.x:
+    temp_new_color = un_color(new_color)
+
+    if r > temp_new_color[1]:
         direction[0] = -1
-        tmp = abs(old_color.x - new_color.x)
+        tmp = abs(r - temp_new_color[1])
         if tmp > max:
             max = tmp
-    if old_color.y > new_color.y:
+    if g > temp_new_color[2]:
         direction[1] = -1
-        tmp = abs(old_color.y - new_color.y)
+        tmp = abs(g - temp_new_color[2])
         if tmp > max:
             max = tmp
-    if old_color.z > new_color.z:
+    if b > temp_new_color[3]:
         direction[2] = -1
-        tmp = abs(old_color.z - new_color.z)
+        tmp = abs(b - temp_new_color[3])
         if tmp > max:
             max = tmp
 
     for i in range(max):
-        if old_color.x != new_color.x:
-            old_color.x + direction[0]
-        if old_color.y != new_color.y:
-            old_color.y + direction[1]
-        if old_color.z != new_color.z:
-            old_color.z + direction[2]
+        if r != temp_new_color[1]:
+            r + direction[0]
+        if g != temp_new_color[2]:
+            g + direction[1]
+        if b != temp_new_color[3]:
+            b + direction[2]
+
+        old_color = r | g | b
 
         set_color(led_strip, old_color, LED_BRIGHTNESS)
         time.sleep(wait_ms / 1000.0)
