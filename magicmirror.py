@@ -19,13 +19,14 @@ LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 USE_DUSK_DETECTOR = True
 
-colors = [Color(99, 255, 71), Color(250, 0, 154), Color(206, 135, 250)]
+colors = [Color(99, 255, 71), Color(215, 255, 0), Color(144, 30, 255), Color(122, 147, 219), Color(250, 255, 205), Color(222, 255, 173)]
 last_color_choose = 0
 
 def un_color(color):
     return ((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF)
 
-def smooth_color_transition(led_strip, new_color, wait_ms=50):
+def smooth_color_transition(led_strip, new_color, wait_ms=20):
+    led_strip.setBrightness(120)
     old_color = un_color(led_strip.getPixelColor(0))
     r = old_color[0]
     g = old_color[1]
@@ -37,36 +38,38 @@ def smooth_color_transition(led_strip, new_color, wait_ms=50):
 
     if r > temp_new_color[0]:
         direction[0] = -1
-        tmp = abs(r - temp_new_color[0])
-        if tmp > max:
-            max = tmp
+    tmp = abs(r - temp_new_color[0])
+    if tmp > max:
+        max = tmp
     if g > temp_new_color[1]:
         direction[1] = -1
-        tmp = abs(g - temp_new_color[1])
-        if tmp > max:
-            max = tmp
+    tmp = abs(g - temp_new_color[1])
+    if tmp > max:
+        max = tmp
     if b > temp_new_color[2]:
         direction[2] = -1
-        tmp = abs(b - temp_new_color[2])
-        if tmp > max:
-            max = tmp
+    tmp = abs(b - temp_new_color[2])
+    if tmp > max:
+        max = tmp
 
     for i in range(max):
         if r != temp_new_color[0]:
-            r + direction[0]
+            r = r + direction[0]
         if g != temp_new_color[1]:
-            g + direction[1]
+            g = g + direction[1]
         if b != temp_new_color[2]:
-            b + direction[2]
+            b = b + direction[2]
 
-        old_color = r | g | b
+        old_color = Color(r, g, b)
 
-        set_color(led_strip, old_color, LED_BRIGHTNESS)
+        for k in range(led_strip.numPixels())
+            led_strip.setPixelColor(k, old_color)
+        led_strip.show()
         time.sleep(wait_ms / 1000.0)
 
 def idle_animation(led_strip):
     while True:
-        tmp = randint(0, 3)
+        tmp = randint(0, 5)
         if tmp != last_color_choose:
             smooth_color_transition(led_strip, colors[tmp])
             return True
