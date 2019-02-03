@@ -19,14 +19,34 @@ LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 USE_DUSK_DETECTOR = True
 
-colors = [Color(99, 255, 71), Color(215, 255, 0), Color(144, 30, 255), Color(122, 147, 219), Color(250, 255, 205), Color(222, 255, 173)]
+colors = [Color(99, 255, 71), Color(255, 127, 0), Color(144, 30, 255), Color(0, 148, 211), Color(250, 255, 205), Color(222, 255, 173)]
 last_color_choose = 0
+
+def dynamic_breath(led_strip, to_brightness=0):
+    if to_brightness != 0:
+        new_brightness = to_brightness
+    else:
+        new_brightness = randint(30, 225)
+
+    old_brightness = led_strip.getBrightness()
+    if old_brightness < new_brightness:
+        direction = 1
+        animation_range = abs(old_brightness - new_brightness)
+    else:
+        direction = -1
+        animation_range = abs(old_brightness - new_brightness)
+
+    for i in range(animation_range):
+        old_brightness = old_brightness + direction
+        led_strip.setBrightness(old_brightness)
+        led_strip.show()
+        time.sleep(20 / 1000.0)
 
 def un_color(color):
     return ((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF)
 
 def smooth_color_transition(led_strip, new_color, wait_ms=20):
-    led_strip.setBrightness(120)
+    dynamic_breath(led_strip, 120)
     old_color = un_color(led_strip.getPixelColor(0))
     r = old_color[0]
     g = old_color[1]
@@ -315,7 +335,8 @@ def check_status(actual_motion_status, actual_light_lvl):
         if not timer.get_blocked():
             if status.get_motion_trigger():
                 status.led_mode = 1
-                water_fall(strip, 20)
+                #water_fall(strip, 20)
+                dynamic_breath(strip)
             else:
                 status.led_mode = 0
                 #breath(strip, Color(206, 135, 250))
@@ -332,8 +353,9 @@ def looking_for_motion(led_strip):
         if status.led_mode == 0:
             if not status.checkpoint(GPIO.input(11), get_dusk_status()):
                 timer.set_timer(time.time(), 8)
-                fade_out_from_current_brightness(led_strip, 1)
-                water_fall(led_strip, 20)
+                #fade_out_from_current_brightness(led_strip, 1)
+                #water_fall(led_strip, 20)
+                dynamic_breath(led_strip)
                 return True
     return False
 
