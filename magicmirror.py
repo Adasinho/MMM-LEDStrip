@@ -28,9 +28,9 @@ def dynamic_breath(led_strip, to_brightness=0):
     else:
         new_brightness = randint(30, 225)
 
+    direction = 1
     old_brightness = led_strip.getBrightness()
     if old_brightness < new_brightness:
-        direction = 1
         animation_range = abs(old_brightness - new_brightness)
     else:
         direction = -1
@@ -42,11 +42,15 @@ def dynamic_breath(led_strip, to_brightness=0):
         led_strip.show()
         time.sleep(20 / 1000.0)
 
+    status.led_mode = 0
+
 def un_color(color):
     return ((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF)
 
 def smooth_color_transition(led_strip, new_color, wait_ms=20):
-    dynamic_breath(led_strip, 120)
+    if strip.getBrightness() != 120:
+        dynamic_breath(led_strip, 120)
+
     old_color = un_color(led_strip.getPixelColor(0))
     r = old_color[0]
     g = old_color[1]
