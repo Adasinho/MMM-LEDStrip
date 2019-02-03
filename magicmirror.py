@@ -347,7 +347,8 @@ def check_status(actual_motion_status, actual_light_lvl):
                 idle_animation(strip)
         else:
             status.led_mode = 1
-            rooling(strip, 10)
+            #rooling(strip, 10)
+            dynamic_breath(strip)
 
 
 
