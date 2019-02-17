@@ -40,9 +40,11 @@ def dynamic_breath(led_strip, to_brightness=0):
         old_brightness = old_brightness + direction
         led_strip.setBrightness(old_brightness)
         led_strip.show()
-        time.sleep(20 / 1000.0)
+        time.sleep(5 / 1000.0)
 
-    status.led_mode = 0
+    timer.check_timer(time.time(), GPIO.input(11))
+    if not timer.get_blocked():
+        status.led_mode = 0
 
 def un_color(color):
     return ((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF)
