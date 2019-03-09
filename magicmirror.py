@@ -52,7 +52,7 @@ def un_color(color):
     return ((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF)
 
 def smooth_color_transition(led_strip, new_color, wait_ms=20):
-    if strip.getBrightness() != 120:
+    if led_strip.getBrightness() != 120:
         dynamic_breath(led_strip, 120)
 
     old_color = un_color(led_strip.getPixelColor(0))
@@ -112,7 +112,7 @@ def get_dusk_status(led_strip):
         if actual_light_status != last_light_status:
             if not actual_light_status:
                 status.led_mode = 1
-                fade_out_from_current_brightness(strip)
+                fade_out_from_current_brightness(led_strip)
                 status.led_mode = 0
                 leds_off(led_strip)
             last_light_status = actual_light_status
@@ -165,8 +165,8 @@ class Status:
         else:
             return False
 
-    def checkpoint(self, actual_motion_status):
-        if get_dusk_status():
+    def checkpoint(self, actual_motion_status, actual_light_level):
+        if actual_light_level:
             # if self.check_light_lvl(actualLightLvl) == True: # When we have night
             if not self.check_motion(actual_motion_status):  # When nobody is move
                 return True  # Can animate
@@ -347,22 +347,22 @@ def loading(led_strip, color, length, speed=10.0):
         snake(led_strip, i, speed)
 
 
-def check_status(actual_motion_status, actual_light_lvl):
+def check_status(led_strip, actual_motion_status, actual_light_lvl):
     # if status.checkpoint(actualMotionStatus, actualLightLvl) == True:
     if actual_light_lvl:
         if not timer.get_blocked():
             if status.get_motion_trigger():
                 status.led_mode = 1
-                #water_fall(strip, 20)
-                dynamic_breath(strip)
+                #water_fall(led_strip, 20)
+                dynamic_breath(led_strip)
             else:
                 status.led_mode = 0
-                #breath(strip, Color(206, 135, 250))
-                idle_animation(strip)
+                #breath(led_strip, Color(206, 135, 250))
+                idle_animation(led_strip)
         else:
             status.led_mode = 1
-            #rooling(strip, 10)
-            dynamic_breath(strip)
+            #rooling(led_strip, 10)
+            dynamic_breath(led_strip)
 
 
 
@@ -370,7 +370,7 @@ def looking_for_motion(led_strip):
     timer.check_timer(time.time(), GPIO.input(11))
     if not timer.get_blocked():
         if status.led_mode == 0:
-            if not status.checkpoint(GPIO.input(11)):
+            if not status.checkpoint(GPIO.input(11), get_dusk_status(led_strip)):
                 timer.set_timer(time.time(), 8)
                 #fade_out_from_current_brightness(led_strip, 1)
                 #water_fall(led_strip, 20)
@@ -421,7 +421,7 @@ if __name__ == '__main__':
     try:
         while True:
             # status.check_motion(GPIO.input(11))
-            check_status(GPIO.input(11), get_dusk_status())
+            check_status(strip, GPIO.input(11), get_dusk_status(strip))
 
         # print ('Light sky blue')
         # breath(strip, Color(206, 135, 250))
