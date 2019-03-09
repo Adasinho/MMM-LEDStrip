@@ -105,6 +105,8 @@ def idle_animation(led_strip):
             return True
 
 def get_dusk_status():
+    global last_light_status
+
     if USE_DUSK_DETECTOR:
         actual_light_status = GPIO.input(13)
         if actual_light_status != last_light_status:
