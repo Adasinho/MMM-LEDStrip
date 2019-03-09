@@ -27,6 +27,7 @@ last_color_choose = 0
 
 last_light_status = False # False - day, True - night
 
+# Time when all leds are off (between night and morning)
 def sleep_time():
     now = datetime.datetime.now()
     if (now.hour > MORNING_HOUR) and (now.hour < NIGHT_HOUR):
@@ -34,6 +35,7 @@ def sleep_time():
     else:
         return True # LEDs can't animate, time to sleep!
 
+# Animation when somebody is near mirror
 def dynamic_breath(led_strip, to_brightness=0):
     if to_brightness != 0:
         new_brightness = to_brightness
@@ -61,6 +63,7 @@ def dynamic_breath(led_strip, to_brightness=0):
 def un_color(color):
     return ((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF)
 
+# Smooth transition form old color to new
 def smooth_color_transition(led_strip, new_color, wait_ms=20):
     if led_strip.getBrightness() != 120:
         dynamic_breath(led_strip, 120)
@@ -107,6 +110,7 @@ def smooth_color_transition(led_strip, new_color, wait_ms=20):
             return False
         time.sleep(wait_ms / 1000.0)
 
+# Animation when nobody is near mirror
 def idle_animation(led_strip):
     while True:
         tmp = randint(0, 5)
@@ -178,7 +182,6 @@ class Status:
 
     def checkpoint(self, actual_motion_status, actual_light_level):
         if actual_light_level:
-            # if self.check_light_lvl(actualLightLvl) == True: # When we have night
             if not self.check_motion(actual_motion_status):  # When nobody is move
                 return True  # Can animate
 
@@ -247,7 +250,8 @@ def fade_out_from_current_brightness(led_strip, wait_ms=10):
         time.sleep(wait_ms / 1000.0)
     return True
 
-def rooling(led_strip, iterations, wait_ms=20):
+# Animation effect
+def rooling(led_strip, wait_ms=20):
     for i in range(led_strip.numPixels() - 1, 1, -1):
         tmp = led_strip.getPixelColor(i - 1)
         led_strip.setPixelColor(i - 1, led_strip.getPixelColor(i))
@@ -264,7 +268,7 @@ def rooling(led_strip, iterations, wait_ms=20):
         status.led_mode = 0
         fade_out(led_strip)
 
-
+# Animation effect
 def snake(led_strip, length, wait_ms=5):
     temp_color = 0
     for i in range(led_strip.numPixels()):
@@ -281,7 +285,7 @@ def snake(led_strip, length, wait_ms=5):
     led_strip.show()
     time.sleep(wait_ms / 1000.0)
 
-
+# Animation effect
 def breath(led_strip, color, wait_ms=10):  # idle animation
     """Breath effect"""
 
@@ -299,7 +303,7 @@ def breath(led_strip, color, wait_ms=10):  # idle animation
     leds_off(led_strip)
     time.sleep(0.2)
 
-
+# Animation effect
 def mirror_fall(led_strip, color, wait_ms=50):
     """Mirror Fall"""
 
@@ -326,7 +330,7 @@ def mirror_fall(led_strip, color, wait_ms=50):
 
     fade_out(led_strip)
 
-
+# Animation effect
 def water_fall(led_strip, wait_ms=50):  # Trigger animation
     """Waterfall"""
     leds_off(led_strip)
@@ -344,7 +348,7 @@ def water_fall(led_strip, wait_ms=50):  # Trigger animation
     status.led_mode = 0
     # fade_out(led_strip)
 
-
+# Animation effect
 def loading(led_strip, color, length, speed=10.0):
     leds_off(led_strip)
     led_strip.setBrightness(255)
@@ -357,9 +361,8 @@ def loading(led_strip, color, length, speed=10.0):
             speed = float(speed / 2.0)
         snake(led_strip, i, speed)
 
-
-def check_status(led_strip, actual_motion_status, actual_light_lvl):
-    # if status.checkpoint(actualMotionStatus, actualLightLvl) == True:
+# Decide which animation can be show now, depends of time and light level
+def check_status(led_strip, actual_light_lvl):
     if actual_light_lvl:
         if not timer.get_blocked():
             if status.get_motion_trigger():
@@ -373,10 +376,8 @@ def check_status(led_strip, actual_motion_status, actual_light_lvl):
                     idle_animation(led_strip)
         else:
             status.led_mode = 1
-            #rooling(led_strip, 10)
+            #rooling(led_strip)
             dynamic_breath(led_strip)
-
-
 
 def looking_for_motion(led_strip):
     timer.check_timer(time.time(), GPIO.input(11))
@@ -432,27 +433,7 @@ if __name__ == '__main__':
 
     try:
         while True:
-            # status.check_motion(GPIO.input(11))
-            check_status(strip, GPIO.input(11), get_dusk_status(strip))
-
-        # print ('Light sky blue')
-        # breath(strip, Color(206, 135, 250))
-        # print ('aqua marine')
-        # breath(strip, Color(255, 127, 212))
-        # print ('medium spring green')
-        # breath(strip, Color(250, 0, 154))
-        # print ('cyan')
-        # breath(strip, Color(255, 0, 255))
-        # print ('tomato')
-        # breath(strip, Color(99, 255, 71))
-        # print ('Yellow')
-        # breath(strip, Color(255, 255, 0))
-        # print ('Mirror Fall Blue')
-        # mirror_fall(strip, Color(0, 0, 255))
-        # print ('Waterfall')
-        # water_fall(strip)
-        # print ('Loading')
-        # loading(strip, Color(255, 255, 0), 5, 50.0)
+            check_status(strip, get_dusk_status(strip))
 
     except KeyboardInterrupt:
         if args.clear:
