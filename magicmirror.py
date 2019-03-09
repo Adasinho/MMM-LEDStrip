@@ -22,7 +22,7 @@ USE_DUSK_DETECTOR = True
 colors = [Color(99, 255, 71), Color(255, 127, 0), Color(144, 30, 255), Color(0, 148, 211), Color(250, 255, 205), Color(222, 255, 173)]
 last_color_choose = 0
 
-last_light_status = False
+last_light_status = False # False - day, True - night
 
 def dynamic_breath(led_strip, to_brightness=0):
     if to_brightness != 0:
@@ -111,7 +111,9 @@ def get_dusk_status():
         actual_light_status = GPIO.input(13)
         if actual_light_status != last_light_status:
             if not actual_light_status:
-                fade_out(strip)
+                status.led_mode = 1
+                fade_out_from_current_brightness(strip)
+                status.led_mode = 0
             last_light_status = actual_light_status
         return actual_light_status
     else:
