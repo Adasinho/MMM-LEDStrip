@@ -2,6 +2,7 @@
 # Author: Adasinho (adirm10@yahoo.com)
 
 import time
+import datetime
 from neopixel import *
 from random import randint
 import argparse
@@ -18,11 +19,20 @@ LED_INVERT = False  # True to invert the signal (when using NPN transistor level
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 USE_DUSK_DETECTOR = True
+MORNING_HOUR = 6
+NIGHT_HOUR = 23
 
 colors = [Color(99, 255, 71), Color(255, 127, 0), Color(144, 30, 255), Color(0, 148, 211), Color(250, 255, 205), Color(222, 255, 173)]
 last_color_choose = 0
 
 last_light_status = False # False - day, True - night
+
+def sleep_time():
+    now = datetime.datetime.now()
+    if (now.hour > MORNING_HOUR) and (now.hour < NIGHT_HOUR):
+        return False # LEDs can animate
+    else:
+        return True # LEDs can't animate, time to sleep!
 
 def dynamic_breath(led_strip, to_brightness=0):
     if to_brightness != 0:
@@ -104,6 +114,7 @@ def idle_animation(led_strip):
             smooth_color_transition(led_strip, colors[tmp])
             return True
 
+# If use dusk detector, then return True if we have night or False when day
 def get_dusk_status(led_strip):
     global last_light_status
 
@@ -356,9 +367,10 @@ def check_status(led_strip, actual_motion_status, actual_light_lvl):
                 #water_fall(led_strip, 20)
                 dynamic_breath(led_strip)
             else:
-                status.led_mode = 0
-                #breath(led_strip, Color(206, 135, 250))
-                idle_animation(led_strip)
+                if not sleep_time():
+                    status.led_mode = 0
+                    #breath(led_strip, Color(206, 135, 250))
+                    idle_animation(led_strip)
         else:
             status.led_mode = 1
             #rooling(led_strip, 10)
