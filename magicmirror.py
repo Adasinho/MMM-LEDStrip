@@ -104,7 +104,7 @@ def idle_animation(led_strip):
             smooth_color_transition(led_strip, colors[tmp])
             return True
 
-def get_dusk_status():
+def get_dusk_status(led_strip):
     global last_light_status
 
     if USE_DUSK_DETECTOR:
@@ -114,6 +114,7 @@ def get_dusk_status():
                 status.led_mode = 1
                 fade_out_from_current_brightness(strip)
                 status.led_mode = 0
+                leds_off(led_strip)
             last_light_status = actual_light_status
         return actual_light_status
     else:
@@ -196,13 +197,11 @@ class Timer:
     def get_blocked(self):
         return self.blocked
 
-
-def set_color(led_strip, color, brightness):
+def leds_off(led_strip):
     for i in range(led_strip.numPixels()):
-        led_strip.setPixelColor(i, color)
-        led_strip.setBrightness(brightness)
-        led_strip.show()
-
+        led_strip.setPixelColor(i, Color(0, 0, 0))
+    led_strip.setBrightness(0)
+    led_strip.show()
 
 def fade_in(led_strip, color, wait_ms=10):
     for i in range(255):
@@ -223,6 +222,7 @@ def fade_out(led_strip, wait_ms=10):
         if looking_for_motion(led_strip):
             return False
         time.sleep(wait_ms / 1000.0)
+    leds_off(led_strip)
     # status.led_mode = 0
     return True
 
@@ -278,14 +278,14 @@ def breath(led_strip, color, wait_ms=10):  # idle animation
     stopBrightness = LED_BRIGHTNESS
     step = 1
 
-    set_color(led_strip, Color(0, 0, 0), 0)
+    leds_off(led_strip)
 
     if not fade_in(led_strip, color):
         return False
     if not fade_out(led_strip):
         return False
 
-    set_color(led_strip, Color(0, 0, 0), 0)
+    leds_off(led_strip)
     time.sleep(0.2)
 
 
@@ -318,7 +318,7 @@ def mirror_fall(led_strip, color, wait_ms=50):
 
 def water_fall(led_strip, wait_ms=50):  # Trigger animation
     """Waterfall"""
-    set_color(led_strip, Color(0, 0, 0), 0)
+    leds_off(led_strip)
     led_strip.setBrightness(255)
     led_strip.setPixelColor(0, Color(0, randint(0, 127), randint(0, 255)))
 
@@ -335,7 +335,7 @@ def water_fall(led_strip, wait_ms=50):  # Trigger animation
 
 
 def loading(led_strip, color, length, speed=10.0):
-    set_color(led_strip, Color(0, 0, 0), 0)
+    leds_off(led_strip)
     led_strip.setBrightness(255)
     for i in range(length):
         led_strip.setPixelColor(i, color)
