@@ -22,6 +22,8 @@ USE_DUSK_DETECTOR = True
 colors = [Color(99, 255, 71), Color(255, 127, 0), Color(144, 30, 255), Color(0, 148, 211), Color(250, 255, 205), Color(222, 255, 173)]
 last_color_choose = 0
 
+last_light_status = False
+
 def dynamic_breath(led_strip, to_brightness=0):
     if to_brightness != 0:
         new_brightness = to_brightness
@@ -104,7 +106,12 @@ def idle_animation(led_strip):
 
 def get_dusk_status():
     if USE_DUSK_DETECTOR:
-        return GPIO.input(13)
+        actual_light_status = GPIO.input(13)
+        if actual_light_status != last_light_status:
+            if not actual_light_status:
+                fade_out(strip)
+            last_light_status = actual_light_status
+        return actual_light_status
     else:
         return True
 
@@ -153,10 +160,11 @@ class Status:
         else:
             return False
 
-    def checkpoint(self, actual_motion_status, actual_light_lvl):
-        # if self.check_light_lvl(actualLightLvl) == True: # When we have night
-        if not self.check_motion(actual_motion_status):  # When nobody is move
-            return True  # Can animate
+    def checkpoint(self, actual_motion_status):
+        if get_dusk_status():
+            # if self.check_light_lvl(actualLightLvl) == True: # When we have night
+            if not self.check_motion(actual_motion_status):  # When nobody is move
+                return True  # Can animate
 
         return False  # Can't animate
 
@@ -358,7 +366,7 @@ def looking_for_motion(led_strip):
     timer.check_timer(time.time(), GPIO.input(11))
     if not timer.get_blocked():
         if status.led_mode == 0:
-            if not status.checkpoint(GPIO.input(11), get_dusk_status()):
+            if not status.checkpoint(GPIO.input(11)):
                 timer.set_timer(time.time(), 8)
                 #fade_out_from_current_brightness(led_strip, 1)
                 #water_fall(led_strip, 20)
@@ -394,6 +402,8 @@ if __name__ == '__main__':
 
     # Initialize status Class (set actual value for all sensors)
     status = Status(GPIO.input(11), True)
+
+    last_light_status = GPIO.input(13)
 
     print ('Press Crtl-C to quit.')
     if not args.clear:
