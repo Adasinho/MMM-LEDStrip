@@ -1,6 +1,7 @@
 # Custom magicmirror effects with NeoPixel library
 # Author: Adasinho (adirm10@yahoo.com)
 
+from neopixel import *
 from sensors_manager import get_actual_motion_status
 from random import randint
 
