@@ -2,8 +2,8 @@
 # Author: Adasinho (adirm10@yahoo.com)
 
 from neopixel import *
-from animations import *
-from sensors_manager import *
+from animations import dynamic_breath, idle_animation, mirror_fall
+from sensors_manager import SensorsManager
 
 import argparse
 
