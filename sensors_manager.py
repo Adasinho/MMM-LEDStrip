@@ -17,18 +17,20 @@ def get_actual_motion_status():
 def get_actual_light_status():
     return GPIO.input(USE_DUSK_DETECTOR)
 
+def init():
+    # Initialize GPIO
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(GPIO_MOTION_SENSOR, GPIO.IN)
+    GPIO.setup(GPIO_LIGHT_SENSOR, GPIO.IN)
+
 class SensorsManager:
     def __init__(self):
+        init()
         self.timer = Timer()
         self.status = Status(get_actual_motion_status(), True)
         self.last_light_status = get_actual_light_status()  # False - day, True - night
         self.dayTime = False
-
-        # Initialize GPIO
-        GPIO.setwarnings(False)
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(GPIO_MOTION_SENSOR, GPIO.IN)
-        GPIO.setup(GPIO_LIGHT_SENSOR, GPIO.IN)
 
     # If use dusk detector, then return True if we have night or False when day
     def get_dusk_status(self, led_strip):
