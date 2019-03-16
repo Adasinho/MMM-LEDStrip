@@ -22,7 +22,7 @@ def fade_in(led_strip, manager, color, wait_ms=10):
         if manager.looking_for_motion(led_strip):
             if manager.dayTime:
                 manager.status.led_mode = 1
-                fade_out_from_current_brightness_no_trigger(led_strip)
+                fade_out_from_current_brightness(led_strip, manager)
                 manager.status.led_mode = 0
                 turn_off_led_strip(led_strip)
             dynamic_breath(led_strip, manager)
@@ -37,7 +37,7 @@ def fade_out(led_strip, manager, wait_ms=10):
         if manager.looking_for_motion(led_strip):
             if manager.dayTime:
                 manager.status.led_mode = 1
-                fade_out_from_current_brightness_no_trigger(led_strip)
+                fade_out_from_current_brightness(led_strip, manager)
                 manager.status.led_mode = 0
                 turn_off_led_strip(led_strip)
             dynamic_breath(led_strip, manager)
@@ -92,7 +92,7 @@ def smooth_color_transition(led_strip, manager, new_color, wait_ms=20):
         if manager.looking_for_motion(led_strip):
             if manager.dayTime:
                 manager.status.led_mode = 1
-                fade_out_from_current_brightness_no_trigger(led_strip)
+                fade_out_from_current_brightness(led_strip, manager)
                 manager.status.led_mode = 0
                 turn_off_led_strip(led_strip)
             dynamic_breath(led_strip, manager)
@@ -132,11 +132,11 @@ def turn_off_led_strip(led_strip):
     led_strip.show()
 
 # Animation when nobody is near mirror
-def idle_animation(led_strip):
+def idle_animation(led_strip, manager):
     while True:
         tmp = randint(0, 5)
         if tmp != last_color_choose:
-            smooth_color_transition(led_strip, colors[tmp])
+            smooth_color_transition(led_strip, manager, colors[tmp])
             return True
 
 # Animation effect
@@ -191,11 +191,6 @@ def fade_out_from_current_brightness(led_strip, manager, wait_ms=10):
         led_strip.setBrightness(i)
         led_strip.show()
         if manager.looking_for_motion(led_strip):
-            if manager.dayTime:
-                manager.status.led_mode = 1
-                fade_out_from_current_brightness_no_trigger(led_strip)
-                manager.status.led_mode = 0
-                turn_off_led_strip(led_strip)
             dynamic_breath(led_strip, manager)
             return False
         time.sleep(wait_ms / 1000.0)
@@ -223,24 +218,24 @@ def rooling(led_strip, manager, wait_ms=20):
     manager.timer.check_timer(time.time(), get_actual_motion_status())
     if not manager.timer.get_blocked():
         manager.status.led_mode = 0
-        fade_out(led_strip)
+        fade_out(led_strip, manager)
 
 # Animation effect
-def breath(led_strip, color, wait_ms=10):  # idle animation
+def breath(led_strip, manager, color, wait_ms=10):  # idle animation
     """Breath effect"""
 
     turn_off_led_strip(led_strip)
 
-    if not fade_in(led_strip, color):
+    if not fade_in(led_strip, manager, color):
         return False
-    if not fade_out(led_strip):
+    if not fade_out(led_strip, manager):
         return False
 
     turn_off_led_strip(led_strip)
     time.sleep(0.2)
 
 # Animation effect
-def mirror_fall(led_strip, color, wait_ms=50):
+def mirror_fall(led_strip, manager, color, wait_ms=50):
     """Mirror Fall"""
 
     led_strip.setBrightness(255)
@@ -264,4 +259,4 @@ def mirror_fall(led_strip, color, wait_ms=50):
         led_strip.show()
         time.sleep(wait_ms / 1000.0)
 
-    fade_out(led_strip)
+    fade_out(led_strip, manager)

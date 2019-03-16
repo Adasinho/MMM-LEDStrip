@@ -21,7 +21,7 @@ def update():
     if ref == 1:
         dynamic_breath(strip, manager)
     elif ref == 2:
-        idle_animation(strip)
+        idle_animation(strip, manager)
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
     manager.status.led_mode = 1  # 0 - idle mode, 1 - trigger mode
 
-    mirror_fall(strip, Color(99, 255, 71))  # First welcome animate
+    mirror_fall(strip, manager, Color(99, 255, 71))  # First welcome animate
 
     try:
         while True:
