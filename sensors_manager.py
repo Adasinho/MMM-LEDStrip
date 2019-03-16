@@ -1,7 +1,6 @@
 # Custom magicmirror effects with NeoPixel library
 # Author: Adasinho (adirm10@yahoo.com)
 
-from animations import fade_out_from_current_brightness_no_trigger, turn_off_led_strip
 from status import *
 from timer import *
 
@@ -23,6 +22,7 @@ class SensorsManager:
         self.timer = Timer()
         self.status = Status(get_actual_motion_status(), True)
         self.last_light_status = get_actual_light_status()  # False - day, True - night
+        self.dayTime = False
 
         # Initialize GPIO
         GPIO.setwarnings(False)
@@ -36,10 +36,8 @@ class SensorsManager:
             actual_light_status = get_actual_light_status()
             if actual_light_status != self.last_light_status:
                 if not actual_light_status:
-                    self.status.led_mode = 1
-                    fade_out_from_current_brightness_no_trigger(led_strip)
-                    self.status.led_mode = 0
-                    turn_off_led_strip(led_strip)
+                    self.dayTime = True
+                self.dayTime = False
                 self.last_light_status = actual_light_status
             return actual_light_status
         else:
