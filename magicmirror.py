@@ -2,7 +2,7 @@
 # Author: Adasinho (adirm10@yahoo.com)
 
 from neopixel import *
-from animations import mirror_fall
+from animations import *
 from sensors_manager import *
 
 import argparse
@@ -15,6 +15,13 @@ LED_DMA = 10  # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
+
+def update():
+    ref = manager.check_status(strip)
+    if ref == 1:
+        dynamic_breath(strip, manager)
+    elif ref == 2:
+        idle_animation(strip)
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -41,7 +48,7 @@ if __name__ == '__main__':
 
     try:
         while True:
-            manager.check_status(strip)
+            update()
 
     except KeyboardInterrupt:
         if args.clear:

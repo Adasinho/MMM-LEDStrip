@@ -19,6 +19,7 @@ def fade_in(led_strip, manager, color, wait_ms=10):
         led_strip.setBrightness(i)
         led_strip.show()
         if manager.looking_for_motion(led_strip):
+            dynamic_breath(led_strip, manager)
             return False
         time.sleep(wait_ms / 1000.0)
     return True
@@ -28,10 +29,10 @@ def fade_out(led_strip, manager, wait_ms=10):
         led_strip.setBrightness(i)
         led_strip.show()
         if manager.looking_for_motion(led_strip):
+            dynamic_breath(led_strip, manager)
             return False
         time.sleep(wait_ms / 1000.0)
     turn_off_led_strip(led_strip)
-    # status.led_mode = 0
     return True
 
 # Smooth transition form old color to new
@@ -78,6 +79,7 @@ def smooth_color_transition(led_strip, manager, new_color, wait_ms=20):
             led_strip.setPixelColor(k, old_color)
         led_strip.show()
         if manager.looking_for_motion(led_strip):
+            dynamic_breath(led_strip, manager)
             return False
         time.sleep(wait_ms / 1000.0)
 
@@ -167,7 +169,6 @@ def water_fall(led_strip, status, wait_ms=50):  # Trigger animation
         led_strip.show()
         time.sleep(wait_ms / 1000.0)
     status.led_mode = 0
-    # fade_out(led_strip)
 
 def fade_out_from_current_brightness(led_strip, manager, wait_ms=10):
     for i in range(led_strip.getBrightness(), 0, -1):
@@ -178,6 +179,12 @@ def fade_out_from_current_brightness(led_strip, manager, wait_ms=10):
             return False
         time.sleep(wait_ms / 1000.0)
     return True
+
+def fade_out_from_current_brightness_no_trigger(led_strip, wait_ms=10):
+    for i in range(led_strip.getBrightness(), 0, -1):
+        led_strip.getBrightness(i)
+        led_strip.show()
+        time.sleep(wait_ms / 1000.0)
 
 # Animation effect
 def rooling(led_strip, manager, wait_ms=20):
