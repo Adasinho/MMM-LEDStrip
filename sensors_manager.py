@@ -15,7 +15,7 @@ def get_actual_motion_status():
     return GPIO.input(GPIO_MOTION_SENSOR)
 
 def get_actual_light_status():
-    return GPIO.input(USE_DUSK_DETECTOR)
+    return GPIO.input(GPIO_LIGHT_SENSOR)
 
 def init():
     # Initialize GPIO
