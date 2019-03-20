@@ -25,11 +25,11 @@ class Status:
             self.motionStatus = actual_motion_status
 
             if actual_motion_status:
-                print "Ktos sie ruszyl!"
+                print("Ktos sie ruszyl!")
                 self.motionTrigger = True
                 return True
             else:
-                print "Nikogo nie ma!"
+                print("Nikogo nie ma!")
                 return False
         else:
             self.motionTrigger = False

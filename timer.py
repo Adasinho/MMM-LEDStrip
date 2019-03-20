@@ -13,8 +13,8 @@ class Timer:
         self.duration = 0
 
     def check_timer(self, actual_time, motion):
-        print 'Actual Time in ms: ', actual_time
-        print 'Last time + delay: ', self.lastTime + self.duration
+        print('Actual Time in ms: ', actual_time)
+        print('Last time + delay: ', self.lastTime + self.duration)
         if self.blocked:
             if (self.lastTime + self.duration) < actual_time:
                 self.blocked = False

@@ -2,8 +2,9 @@
 # Author: Adasinho (adirm10@yahoo.com)
 
 from neopixel import *
-from animations import dynamic_breath, idle_animation, mirror_fall
+from animations import dynamic_breath, idle_animation, mirror_fall, fade_out_from_current_brightness_no_trigger
 from sensors_manager import SensorsManager
+from sensors_configuration import *
 
 import argparse
 
@@ -17,11 +18,13 @@ LED_INVERT = False  # True to invert the signal (when using NPN transistor level
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 def update():
-    ref = manager.check_status(strip)
-    if ref == 1:
+    ref = manager.check_status()
+    if ref == 2:
         dynamic_breath(strip, manager)
-    elif ref == 2:
+    elif ref == 3:
         idle_animation(strip, manager)
+    else:
+        fade_out_from_current_brightness_no_trigger(strip)
 
 # Main program logic follows:
 if __name__ == '__main__':
@@ -30,13 +33,16 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
     args = parser.parse_args()
 
+    # init GPIO
+    init()
+
     # Create NeoPixel object with appropriate configuration.
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     # Intialize the library (must be called once before other functions).
     strip.begin()
 
     # Initialize Sensors Manager
-    manager = SensorsManager()
+    manager = SensorsManager(get_actual_motion_status(), get_actual_light_status())
 
     print ('Press Crtl-C to quit.')
     if not args.clear:
