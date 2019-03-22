@@ -98,6 +98,16 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(2, manager.check_status(actual_light_status))
 
+    def test_givenCheckStatusWhenWeHaveNightAndSomebodyIsNearMirrorThenReturnAnimationMode(self):
+        actual_motion_status = False
+        actual_light_status = True
+        manager = SensorsManager(actual_motion_status, actual_light_status)
+
+        self.assertEqual(3, manager.check_status(actual_light_status))
+        actual_motion_status = True
+        manager.looking_for_motion(actual_motion_status, actual_light_status)
+        self.assertEqual(2, manager.check_status(actual_light_status))
+
 
 if __name__ == '__main__':
     unittest.main()
