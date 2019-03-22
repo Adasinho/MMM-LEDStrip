@@ -47,7 +47,7 @@ class SensorsManager:
         actual_light_lvl = self.get_dusk_status(actual_light_status)
 
         if old_day_time != self.dayTime:
-            if not self.dayTime:
+            if self.dayTime:
                 return 1
 
         if actual_light_lvl:

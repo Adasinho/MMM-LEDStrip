@@ -24,7 +24,7 @@ def update():
         dynamic_breath(strip, manager)
     elif ref == 3:
         idle_animation(strip, manager)
-    elif ref == 1:
+    else:
         fade_out_from_current_brightness_no_trigger(strip)
 
 
