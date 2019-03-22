@@ -53,13 +53,12 @@ class SensorsManager:
                     return 1
 
             if actual_light_lvl:
-                if not self.timer.get_blocked():
-                    if self.status.get_motion_trigger():
-                        self.status.led_mode = 1
-                        return 2
-                    else:
-                        self.status.led_mode = 0
-                        return 3
+                if self.status.get_motion_trigger():
+                    self.status.led_mode = 1
+                    return 2
+                else:
+                    self.status.led_mode = 0
+                    return 3
         else:
             if not self.timer.get_blocked():
                 if self.status.get_motion_trigger():
