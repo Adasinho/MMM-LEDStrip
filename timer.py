@@ -6,6 +6,7 @@ import datetime
 MORNING_HOUR = 6
 NIGHT_HOUR = 23
 
+
 class Timer:
     def __init__(self):
         self.blocked = False
@@ -29,10 +30,11 @@ class Timer:
     def get_blocked(self):
         return self.blocked
 
-# Time when all leds are off (between night and morning)
+
+# Time when all LEDs are off (between night and morning)
 def sleep_time():
     now = datetime.datetime.now()
     if (now.hour > MORNING_HOUR) and (now.hour < NIGHT_HOUR):
-        return False # LEDs can animate
+        return False    # LEDs can animate
     else:
-        return True # LEDs can't animate, time to sleep!
+        return True     # LEDs can't animate, time to sleep!

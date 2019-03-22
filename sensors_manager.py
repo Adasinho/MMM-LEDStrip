@@ -23,6 +23,8 @@ class SensorsManager:
             if actual_light_status != self.last_light_status:
                 if not actual_light_status:
                     self.dayTime = True
+                    self.last_light_status = actual_light_status
+                    return actual_light_status
                 self.dayTime = False
                 self.last_light_status = actual_light_status
             return actual_light_status
@@ -33,7 +35,8 @@ class SensorsManager:
         self.timer.check_timer(time.time(), actual_motion_status)
         if not self.timer.get_blocked():
             if self.status.led_mode == 0:
-                if not self.status.checkpoint(actual_light_status, self.get_dusk_status(actual_light_status)):
+                # If can't animate
+                if not self.status.checkpoint(actual_motion_status, self.get_dusk_status(actual_light_status)):
                     self.timer.set_timer(time.time(), 8)
                     return True
         return False
@@ -43,20 +46,23 @@ class SensorsManager:
         old_day_time = self.dayTime
         actual_light_lvl = self.get_dusk_status(actual_light_status)
 
-        if old_day_time != self.dayTime:
-            if not self.dayTime:
-                return 1
+        if not sleep_time():
+            if old_day_time != self.dayTime:
+                if self.dayTime:
+                    self.status.led_mode = 1
+                    return 1
 
-        if actual_light_lvl:
+            if actual_light_lvl:
+                if not self.timer.get_blocked():
+                    if self.status.get_motion_trigger():
+                        self.status.led_mode = 1
+                        return 2
+                    else:
+                        self.status.led_mode = 0
+                        return 3
+        else:
             if not self.timer.get_blocked():
                 if self.status.get_motion_trigger():
                     self.status.led_mode = 1
-                    return 2
-                else:
-                    if not sleep_time():
-                        self.status.led_mode = 0
-                        return 3
-            else:
-                self.status.led_mode = 1
-                return 1
+                    return 4
         return -1

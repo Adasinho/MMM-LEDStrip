@@ -17,14 +17,16 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
+
 def update():
     ref = manager.check_status(get_actual_light_status())
     if ref == 2:
         dynamic_breath(strip, manager)
     elif ref == 3:
         idle_animation(strip, manager)
-    else:
+    elif ref == 1:
         fade_out_from_current_brightness_no_trigger(strip)
+
 
 # Main program logic follows:
 if __name__ == '__main__':

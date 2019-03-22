@@ -47,7 +47,7 @@ class Status:
             return False
 
     def checkpoint(self, actual_motion_status, actual_light_level):
-        if actual_light_level:
+        if actual_light_level:  # If night
             if not self.check_motion(actual_motion_status):  # When nobody is move
                 return True  # Can animate
 
