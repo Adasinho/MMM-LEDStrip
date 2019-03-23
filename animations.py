@@ -238,28 +238,24 @@ def breath(led_strip, manager, color, wait_ms=10):  # idle animation
 
 
 # Animation effect
-def mirror_fall(led_strip, manager, color, wait_ms=50):
+def mirror_fall(led_strip, color, start_led, stop_led, wait_ms=50):
     """Mirror Fall"""
 
     led_strip.setBrightness(255)
 
-    x1 = 0
-    x2 = 0
-    iterations = 0
+    led_quantity = stop_led - start_led
 
-    if led_strip.numPixels() % 2 == 0:
-        x1 = led_strip.numPixels() / 2 - 1
-        x2 = led_strip.numPixels() / 2
-        iterations = led_strip.numPixels() / 2 - 1
+    if led_quantity % 2 == 0:
+        x1 = start_led + (led_quantity / 2) - 1
+        x2 = start_led + (led_quantity / 2)
+        iterations = led_quantity / 2 - 1
     else:
-        x1 = led_strip.numPixels() / 2
-        x2 = led_strip.numPixels() / 2
-        iterations = led_strip.numPixels() / 2 + 1
+        x1 = start_led + (led_quantity / 2)
+        x2 = start_led + (led_quantity / 2)
+        iterations = led_quantity / 2 + 1
 
     for i in range(iterations):
         led_strip.setPixelColor(x1 - i, color)
         led_strip.setPixelColor(x2 + i, color)
         led_strip.show()
         time.sleep(wait_ms / 1000.0)
-
-    fade_out(led_strip, manager)

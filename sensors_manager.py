@@ -54,4 +54,12 @@ class SensorsManager:
                 else:
                     self.status.led_mode = 1
                     return 2
+        else:
+            if self.status.get_motion_trigger():
+                if not self.timer.get_blocked():
+                    self.timer.set_timer(time.time(), 10)
+                    self.status.led_mode = 0
+                    return 4
+            else:
+                return 1
         return -1

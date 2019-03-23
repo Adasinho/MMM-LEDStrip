@@ -24,7 +24,9 @@ def update():
         dynamic_breath(strip, manager)
     elif ref == 3:
         idle_animation(strip, manager)
-    else:
+    elif ref == 4:
+        mirror_fall(strip, Color(250, 255, 205), 47, 69)
+    elif ref == 1:
         fade_out_from_current_brightness_no_trigger(strip)
 
 
@@ -52,7 +54,7 @@ if __name__ == '__main__':
 
     manager.status.led_mode = 1  # 0 - idle mode, 1 - trigger mode
 
-    mirror_fall(strip, manager, Color(99, 255, 71))  # First welcome animate
+    mirror_fall(strip, Color(99, 255, 71), 0, LED_COUNT)  # First welcome animate
 
     try:
         while True:
