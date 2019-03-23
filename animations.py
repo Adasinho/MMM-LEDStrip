@@ -22,11 +22,6 @@ def fade_in(led_strip, manager, color, wait_ms=10):
         led_strip.setBrightness(i)
         led_strip.show()
         if manager.looking_for_motion(get_actual_motion_status(), get_actual_light_status()):
-            if manager.dayTime:
-                manager.status.led_mode = 1
-                fade_out_from_current_brightness(led_strip, manager)
-                manager.status.led_mode = 0
-                turn_off_led_strip(led_strip)
             dynamic_breath(led_strip, manager)
             return False
         time.sleep(wait_ms / 1000.0)
@@ -38,11 +33,6 @@ def fade_out(led_strip, manager, wait_ms=10):
         led_strip.setBrightness(i)
         led_strip.show()
         if manager.looking_for_motion(get_actual_motion_status(), get_actual_light_status()):
-            if manager.dayTime:
-                manager.status.led_mode = 1
-                fade_out_from_current_brightness(led_strip, manager)
-                manager.status.led_mode = 0
-                turn_off_led_strip(led_strip)
             dynamic_breath(led_strip, manager)
             return False
         time.sleep(wait_ms / 1000.0)
@@ -94,11 +84,6 @@ def smooth_color_transition(led_strip, manager, new_color, wait_ms=20):
             led_strip.setPixelColor(k, old_color)
         led_strip.show()
         if manager.looking_for_motion(get_actual_motion_status(), get_actual_light_status()):
-            if manager.dayTime:
-                manager.status.led_mode = 1
-                fade_out_from_current_brightness(led_strip, manager)
-                manager.status.led_mode = 0
-                turn_off_led_strip(led_strip)
             dynamic_breath(led_strip, manager)
             return False
         time.sleep(wait_ms / 1000.0)
