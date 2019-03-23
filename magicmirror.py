@@ -2,7 +2,7 @@
 # Author: Adasinho (adirm10@yahoo.com)
 
 from neopixel import *
-from animations import dynamic_breath, idle_animation, mirror_fall, fade_out_from_current_brightness_no_trigger
+from animations import dynamic_breath, idle_animation, mirror_fall, fade_out_from_current_brightness_no_trigger, fade_out
 from sensors_manager import SensorsManager
 from sensors_configuration import *
 
@@ -55,6 +55,7 @@ if __name__ == '__main__':
     manager.status.led_mode = 1  # 0 - idle mode, 1 - trigger mode
 
     mirror_fall(strip, Color(99, 255, 71), 0, LED_COUNT)  # First welcome animate
+    fade_out(strip, manager)
 
     try:
         while True:
