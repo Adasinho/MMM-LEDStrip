@@ -201,6 +201,7 @@ def fade_out_from_current_brightness_no_trigger(led_strip, wait_ms=10):
         led_strip.setBrightness(i)
         led_strip.show()
         time.sleep(wait_ms / 1000.0)
+    turn_off_led_strip(led_strip)
 
 
 # Animation effect
