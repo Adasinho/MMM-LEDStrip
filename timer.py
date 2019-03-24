@@ -14,6 +14,7 @@ class Timer:
         self.duration = 0
         self.last_sleep_statement = False
         self.wake_up = False
+        self.unblocked = False
 
     def check_timer(self, actual_time, motion):
         print('Actual Time in ms: ', actual_time)
@@ -21,6 +22,7 @@ class Timer:
         if self.blocked:
             if (self.lastTime + self.duration) < actual_time:
                 self.blocked = False
+                self.unblocked = True
             elif motion:
                 self.set_timer(actual_time, 8)
 
@@ -53,6 +55,12 @@ class Timer:
             return True
         else:
             return False
+
+    def get_unblocked(self):
+        if self.unblocked:
+            self.unblocked = False
+            return True
+        return False
 
 
 def custom_night_hours(morning_hour, night_hour):

@@ -19,7 +19,7 @@ LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 
 def update():
-    ref = manager.check_status(get_actual_light_status())
+    ref = manager.check_status(get_actual_motion_status(), get_actual_light_status())
     if ref == 2:
         dynamic_breath(strip, manager)
     elif ref == 3:
