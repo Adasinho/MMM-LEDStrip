@@ -41,7 +41,7 @@ class SensorsManager:
 
         if not self.timer.sleep_time():
             if self.timer.get_wake_up():
-                return 1
+                return 5
             # when we have dark
             if actual_light_lvl:
                 if not self.timer.get_blocked():

@@ -8,7 +8,7 @@ from sensors_configuration import *
 
 import argparse
 
-# LED strip configurationdynamic_breath:
+# LED strip configuration dynamic_breath:
 LED_COUNT = 116  # Number of LED pixels
 LED_PIN = 18  # GPIO pin connected to the pixels (18 uses PWM!)
 LED_FREQ_HZ = 800000  # LED sugbak frequency in hertz (usually 800 khz)
@@ -26,6 +26,8 @@ def update():
         idle_animation(strip, manager)
     elif ref == 4:
         mirror_fall(strip, Color(250, 255, 205), 47, 69)
+    elif ref == 5:
+        strip.setBrightness(255)
     elif ref == 1:
         fade_out_from_current_brightness_no_trigger(strip)
 
