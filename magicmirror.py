@@ -62,6 +62,8 @@ if __name__ == '__main__':
     mirror_fall(strip, Color(99, 255, 71), 0, LED_COUNT)  # First welcome animate
     fade_out(strip, manager)
 
+    manager.status.led_mode = 0
+
     try:
         while True:
             update()
