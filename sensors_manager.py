@@ -37,13 +37,14 @@ class SensorsManager:
 
     # Decide which animation can be show now, depends of time and light level
     def check_status(self, actual_motion_status, actual_light_status):
-        actual_light_lvl = self.get_dusk_status(actual_light_status)
 
+        # day time
         if not self.timer.sleep_time():
             if self.timer.get_wake_up():
                 return 5
+            dark = self.get_dusk_status(actual_light_status)
             # when we have dark
-            if actual_light_lvl:
+            if dark:
                 if not self.timer.get_blocked():
                     if self.status.get_motion_trigger():
                         self.status.led_mode = 1
@@ -54,15 +55,15 @@ class SensorsManager:
                 else:
                     self.status.led_mode = 1
                     return 2
+            else:
+                self.timer.check_timer(time.time(), actual_motion_status)
         else:
-            self.status.check_motion(actual_motion_status)
-            if self.status.get_motion_trigger():
-                if not self.timer.get_blocked():
-                    self.timer.set_timer(time.time(), 10)
-                    self.status.led_mode = 0
-                    return 4
+            if self.looking_for_motion(actual_motion_status, actual_light_status):
+                self.status.led_mode = 1
+                return 4
             else:
                 self.timer.check_timer(time.time(), actual_motion_status)
                 if self.timer.get_unblocked():
+                    self.status.led_mode = 1
                     return 1
         return -1

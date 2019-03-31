@@ -57,6 +57,7 @@ class MyTestCase(unittest.TestCase):
     def test_givenCheckStatusWhenLightIsFalseThenReturnOffAnimationMode(self):
         actual_motion_status = False    # Nobody here
         actual_light_status = False     # Day time
+        custom_night_hours(-1, 25)
         manager = SensorsManager(actual_motion_status, actual_light_status)
 
         self.assertEqual(-1, manager.check_status(actual_motion_status, actual_light_status))  # -1 means, turn off animations
@@ -98,7 +99,7 @@ class MyTestCase(unittest.TestCase):
 
         manager.check_status(actual_motion_status, actual_light_status)
         custom_night_hours(-1, 25)
-        self.assertEqual(1, manager.check_status(actual_motion_status, actual_light_status))
+        self.assertEqual(5, manager.check_status(actual_motion_status, actual_light_status))
 
     def test_givenCheckStatusWhenSomebodyIsNearMirrorAtSleepTimeThenReturnSleepAnimationMode(self):
         actual_motion_status = False

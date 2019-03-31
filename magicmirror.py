@@ -27,9 +27,12 @@ def update():
     elif ref == 4:
         mirror_fall(strip, Color(250, 255, 205), 47, 69)
     elif ref == 5:
+        manager.status.led_mode = 0
         strip.setBrightness(255)
+        for i in range(strip.numPixels()):
+            strip.setPixelColor(i, Color(255, 255, 255))
     elif ref == 1:
-        fade_out_from_current_brightness_no_trigger(strip)
+        fade_out_from_current_brightness_no_trigger(strip, manager)
 
 
 # Main program logic follows:
