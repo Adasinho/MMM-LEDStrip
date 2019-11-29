@@ -1,13 +1,14 @@
 # Custom magicmirror effects with NeoPixel library
 # Author: Adasinho (adirm10@yahoo.com)
 
+
 # Class to control LEDs
 class Status:
     def __init__(self, actual_motion_status, actual_light_lvl):
         self.motionStatus = actual_motion_status
         self.lightLvl = actual_light_lvl
         self.motionTrigger = False
-        self.led_mode = 0
+        self.animationOnProgress = False
 
     def check_light_lvl(self, actual_light_lvl):
         if self.lightLvl != actual_light_lvl:
@@ -47,7 +48,7 @@ class Status:
             return False
 
     def checkpoint(self, actual_motion_status, actual_light_level):
-        if actual_light_level:  # If night
+        if actual_light_level:  # If dark
             if not self.check_motion(actual_motion_status):  # When nobody is move
                 return True  # Can animate
 

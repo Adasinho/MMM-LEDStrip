@@ -19,7 +19,7 @@ LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 
 def update():
-    ref = manager.check_status(get_actual_motion_status(), get_actual_light_status())
+    ref = manager.get_sensors_status(get_actual_motion_status(), get_actual_light_status())
     if ref == 2:
         dynamic_breath(strip, manager)
     elif ref == 3:
@@ -57,12 +57,12 @@ if __name__ == '__main__':
     if not args.clear:
         print('Use "-c" argument to clear LEDs on exit')
 
-    manager.status.led_mode = 1  # 0 - idle mode, 1 - trigger mode
+    manager.status.animationOnProgress = True  # 0 - idle mode, 1 - trigger mode
 
     mirror_fall(strip, Color(99, 255, 71), 0, LED_COUNT)  # First welcome animate
     fade_out(strip, manager)
 
-    manager.status.led_mode = 0
+    manager.status.animationOnProgress = False
 
     try:
         while True:

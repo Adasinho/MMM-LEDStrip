@@ -1,20 +1,19 @@
-import RPi.GPIO as GPIO
+from shared_variables import *
 
-GPIO_MOTION_SENSOR = 11
-GPIO_LIGHT_SENSOR = 13
+import RPi.GPIO as GPIO
 
 
 def get_actual_motion_status():
-    return GPIO.input(GPIO_MOTION_SENSOR)
+    return GPIO.input(GPiO_MOTION_SENSOR)
 
 
 def get_actual_light_status():
-    return GPIO.input(GPIO_LIGHT_SENSOR)
+    return GPIO.input(GPiO_LIGHT_SENSOR)
 
 
 def init():
     # Initialize GPIO
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(GPIO_MOTION_SENSOR, GPIO.IN)
-    GPIO.setup(GPIO_LIGHT_SENSOR, GPIO.IN)
+    GPIO.setup(GPiO_MOTION_SENSOR, GPIO.IN)
+    GPIO.setup(GPiO_LIGHT_SENSOR, GPIO.IN)
