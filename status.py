@@ -4,11 +4,12 @@
 
 # Class to control LEDs
 class Status:
-    def __init__(self, actual_motion_status, actual_light_lvl):
-        self.motionStatus = actual_motion_status
+    def __init__(self, actual_light_lvl):
         self.lightLvl = actual_light_lvl
-        self.motionTrigger = False
         self.animationOnProgress = False
+
+        import motion_sensor_controller
+        self.motionSensorController = motion_sensor_controller.MotionSensorController()
 
     def check_light_lvl(self, actual_light_lvl):
         if self.lightLvl != actual_light_lvl:
@@ -21,35 +22,9 @@ class Status:
         else:
             return self.lightLvl
 
-    def check_motion(self, actual_motion_status):
-        if self.motionStatus != actual_motion_status:
-            self.motionStatus = actual_motion_status
-
-            if actual_motion_status:
-                print("Ktos sie ruszyl!")
-                self.motionTrigger = True
-                return True
-            else:
-                print("Nikogo nie ma!")
-                return False
-        else:
-            self.motionTrigger = False
-
-            if self.motionStatus:
-                return True
-            else:
-                return False
-
-    def get_motion_trigger(self):
-        if self.motionTrigger:
-            self.motionTrigger = False
-            return True
-        else:
-            return False
-
     def checkpoint(self, actual_motion_status, actual_light_level):
+        self.motionSensorController.update()
         if actual_light_level:  # If dark
-            if not self.check_motion(actual_motion_status):  # When nobody is move
+            if not self.motionSensorController.get_motion_status():  # When nobody is move
                 return True  # Can animate
-
         return False  # Can't animate

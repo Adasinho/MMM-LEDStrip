@@ -9,11 +9,3 @@ def get_actual_motion_status():
 
 def get_actual_light_status():
     return GPIO.input(GPiO_LIGHT_SENSOR)
-
-
-def init():
-    # Initialize GPIO
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(GPiO_MOTION_SENSOR, GPIO.IN)
-    GPIO.setup(GPiO_LIGHT_SENSOR, GPIO.IN)

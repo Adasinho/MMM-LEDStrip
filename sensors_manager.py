@@ -10,9 +10,9 @@ import time
 
 
 class SensorsManager:
-    def __init__(self, actual_motion_status, actual_light_status):
+    def __init__(self, actual_light_status):
         self.timer = Timer()
-        self.status = Status(actual_motion_status, True)
+        self.status = Status(True)
         self.last_light_status = actual_light_status  # False - day, True - night
 
     # If use dusk detector, then return True if we have night or False when day
@@ -42,7 +42,7 @@ class SensorsManager:
                 return 5
             if self.get_dusk_status(actual_light_status):  # dark
                 if not self.timer.get_blocked():  # can start new animation
-                    if self.status.get_motion_trigger():  # somebody triggered animation
+                    if self.status.motionSensorController.check_if_triggered():  # somebody triggered animation
                         self.status.animationOnProgress = True
                         return 2
                     else:  # nobody triggered

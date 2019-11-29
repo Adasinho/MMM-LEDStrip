@@ -7,6 +7,7 @@ from sensors_manager import SensorsManager
 from sensors_configuration import *
 
 import argparse
+import RPi.GPIO as GPIO
 
 # LED strip configuration dynamic_breath:
 LED_COUNT = 116  # Number of LED pixels
@@ -43,7 +44,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # init GPIO
-    init()
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(GPiO_MOTION_SENSOR, GPIO.IN)
+    GPIO.setup(GPiO_LIGHT_SENSOR, GPIO.IN)
 
     # Create NeoPixel object with appropriate configuration.
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
