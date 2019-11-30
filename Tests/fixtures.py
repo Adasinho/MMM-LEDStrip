@@ -1,6 +1,7 @@
 from status import Status
 from motion_sensor_controller import MotionSensorController
-from sensors_manager import SensorsManager
+from dusk_sensor_controller import DuskSensorController
+from animation_controller import AnimationController
 from timer import Timer
 
 
@@ -22,6 +23,16 @@ class SensorsGetterFixture():
         self.light_status = new_light_status
 
 
+class DuckSensorControllerFixture(DuskSensorController):
+    def __init__(self, sensors_getter):
+        self.light_status = False
+        self.triggered = False
+        self.__sensors = sensors_getter.get_actual_light_status()
+
+    def get_dusk_status(self):
+        return self.__sensors
+
+
 class MotionSensorControllerFixture(MotionSensorController):
     def __init__(self, sensors_getter):
         self.motionStatus = False
@@ -35,15 +46,16 @@ class MotionSensorControllerFixture(MotionSensorController):
 class StatusFixture(Status):
     def __init__(self, actual_light_lvl, sensors_getter):
         self.lightLvl = actual_light_lvl
-        self.animationOnProgress = False
         self.motionSensorController = MotionSensorControllerFixture(sensors_getter)
+        self.duskSensorController = DuckSensorControllerFixture(sensors_getter)
 
 
-class SensorsManagerFixture(SensorsManager):
+class AnimationControllerFixture(AnimationController):
     def __init__(self, actual_light_status, sensors_getter):
         self.timer = Timer()
         self.status = StatusFixture(True, sensors_getter)
         self.last_light_status = actual_light_status
+        self.animationOnProgress = False
 
 
 class TestFixture():
@@ -52,7 +64,7 @@ class TestFixture():
         self.actual_light_status = light_status
 
         self.sensors_getter = SensorsGetterFixture(motion_status, light_status)
-        self.manager = SensorsManagerFixture(self.actual_light_status, self.sensors_getter)
+        self.manager = AnimationControllerFixture(self.actual_light_status, self.sensors_getter)
 
     def set_motion_status(self, motion_status):
         self.actual_motion_status = motion_status
@@ -67,13 +79,13 @@ class TestFixture():
         self.actual_motion_status = motion_status
 
     def get_dusk_status(self):
-        return self.manager.get_dusk_status(self.actual_light_status)
+        return self.manager.status.duskSensorController.get_dusk_status()
 
     def get_looking_for_motion(self):
-        return self.manager.looking_for_motion(self.actual_motion_status, self.actual_light_status)
+        return self.manager.looking_for_motion()
 
     def get_check_status(self):
-        return self.manager.get_sensors_status(self.actual_motion_status, self.actual_light_status)
+        return self.manager.get_animation()
 
     def checkpoint(self):
-        self.manager.status.checkpoint(self.actual_motion_status, self.actual_light_status)
+        self.manager.status.checkpoint()

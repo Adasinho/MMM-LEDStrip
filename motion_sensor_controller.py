@@ -4,8 +4,8 @@ class MotionSensorController:
         self.triggered = False
 
     def get_motion_status(self):
-        import sensors_manager
-        return sensors_manager.get_actual_motion_status()
+        import sensors_configuration
+        return sensors_configuration.get_actual_motion_status()
 
     def update(self):
         actual_motion_status = self.get_motion_status()
